@@ -1,3 +1,4 @@
+import 'screens/cqer_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -165,10 +166,20 @@ class RBCOMHomePage extends StatelessWidget {
         ),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$title — em desenvolvimento'),
+       onTap: () {
+  if (title == 'CQER Digital') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CQERScreen(),
+      ),
+    );
+    return;
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('$title — em desenvolvimento'),
             ),
           );
         },
