@@ -1,7 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'edit_cqer_screen.dart';
 
-class CQERScreen extends StatelessWidget {
+class CQERScreen extends StatefulWidget {
   const CQERScreen({super.key});
+
+  @override
+  State<CQERScreen> createState() => _CQERScreenState();
+}
+
+class _CQERScreenState extends State<CQERScreen> {
+  String _nome = 'Rodrigo Elias';
+  String _indicativo = 'PY2PIX';
+  String _classe = 'B';
+  String _validade = 'Não informado';
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarDados();
+  }
+
+  Future<void> _carregarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _nome = prefs.getString('nome') ?? 'Rodrigo Elias';
+      _indicativo = prefs.getString('indicativo') ?? 'PY2PIX';
+      _classe = prefs.getString('classe') ?? 'B';
+
+      final validade = prefs.getString('validade');
+
+      if (validade != null && validade.isNotEmpty) {
+        _validade = validade;
+      } else {
+        _validade = 'Não informado';
+      }
+    });
+  }
+
+  Future<void> _abrirEdicao() async {
+    final resultado = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditCQERScreen(),
+      ),
+    );
+
+    if (resultado == true) {
+      await _carregarDados();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,51 +105,35 @@ class CQERScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
               _buildInfoCard(
                 icon: Icons.person_outline,
                 title: 'Nome',
-                value: 'Rodrigo Elias',
+                value: _nome,
               ),
-
               _buildInfoCard(
                 icon: Icons.radio,
                 title: 'Indicativo',
-                value: 'PY2PIX',
+                value: _indicativo,
               ),
-
               _buildInfoCard(
                 icon: Icons.workspace_premium_outlined,
                 title: 'Classe',
-                value: 'B',
+                value: _classe,
               ),
-
               _buildInfoCard(
                 icon: Icons.history,
                 title: 'Indicativo anterior',
                 value: 'PU2RMM • Classe C',
               ),
-
               _buildInfoCard(
                 icon: Icons.calendar_today_outlined,
                 title: 'Validade',
-                value: 'Não informado',
+                value: _validade,
               ),
-
               const SizedBox(height: 16),
-
               FilledButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Edição do cadastro — em desenvolvimento',
-                      ),
-                    ),
-                  );
-                },
+                onPressed: _abrirEdicao,
                 icon: const Icon(Icons.edit),
                 label: const Text('Editar meus dados'),
               ),

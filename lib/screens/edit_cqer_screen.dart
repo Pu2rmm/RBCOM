@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditCQERScreen extends StatefulWidget {
   const EditCQERScreen({super.key});
@@ -22,6 +23,47 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
   final TextEditingController _validadeController =
       TextEditingController();
 
+  bool _carregando = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarDados();
+  }
+
+  Future<void> _carregarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final nome = prefs.getString('nome');
+    final indicativo = prefs.getString('indicativo');
+    final classe = prefs.getString('classe');
+    final validade = prefs.getString('validade');
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (nome != null && nome.isNotEmpty) {
+        _nomeController.text = nome;
+      }
+
+      if (indicativo != null && indicativo.isNotEmpty) {
+        _indicativoController.text = indicativo;
+      }
+
+      if (classe != null && classe.isNotEmpty) {
+        _classeController.text = classe;
+      }
+
+      if (validade != null && validade.isNotEmpty) {
+        _validadeController.text = validade;
+      }
+
+      _carregando = false;
+    });
+  }
+
   @override
   void dispose() {
     _nomeController.dispose();
@@ -31,12 +73,35 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
     super.dispose();
   }
 
-  void _salvar() {
+  Future<void> _salvar() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    Navigator.pop(context);
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('nome', _nomeController.text.trim());
+
+    await prefs.setString(
+      'indicativo',
+      _indicativoController.text.trim().toUpperCase(),
+    );
+
+    await prefs.setString(
+      'classe',
+      _classeController.text.trim().toUpperCase(),
+    );
+
+    await prefs.setString(
+      'validade',
+      _validadeController.text.trim(),
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    Navigator.pop(context, true);
   }
 
   @override
@@ -52,94 +117,100 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Icon(
-                  Icons.badge_outlined,
-                  size: 64,
-                ),
+        child: _carregando
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Icon(
+                        Icons.badge_outlined,
+                        size: 64,
+                      ),
 
-                const SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
-                TextFormField(
-                  controller: _nomeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome completo',
-                    prefixIcon: Icon(Icons.person_outline),
-                    border: OutlineInputBorder(),
+                      TextFormField(
+                        controller: _nomeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome completo',
+                          prefixIcon: Icon(Icons.person_outline),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Informe seu nome';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: _indicativoController,
+                        textCapitalization: TextCapitalization.characters,
+                        decoration: const InputDecoration(
+                          labelText: 'Indicativo',
+                          prefixIcon: Icon(Icons.radio),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Informe seu indicativo';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: _classeController,
+                        textCapitalization: TextCapitalization.characters,
+                        decoration: const InputDecoration(
+                          labelText: 'Classe',
+                          prefixIcon:
+                              Icon(Icons.workspace_premium_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Informe sua classe';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: _validadeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Validade da licença',
+                          hintText: 'Ex.: 31/12/2030',
+                          prefixIcon:
+                              Icon(Icons.calendar_today_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      FilledButton.icon(
+                        onPressed: _salvar,
+                        icon: const Icon(Icons.save_outlined),
+                        label: const Text('Salvar dados'),
+                      ),
+                    ],
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe seu nome';
-                    }
-                    return null;
-                  },
                 ),
-
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _indicativoController,
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: const InputDecoration(
-                    labelText: 'Indicativo',
-                    prefixIcon: Icon(Icons.radio),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe seu indicativo';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _classeController,
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: const InputDecoration(
-                    labelText: 'Classe',
-                    prefixIcon: Icon(Icons.workspace_premium_outlined),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe sua classe';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _validadeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Validade da licença',
-                    hintText: 'Ex.: 31/12/2030',
-                    prefixIcon: Icon(Icons.calendar_today_outlined),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                FilledButton.icon(
-                  onPressed: _salvar,
-                  icon: const Icon(Icons.save_outlined),
-                  label: const Text('Salvar dados'),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
