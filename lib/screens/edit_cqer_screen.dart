@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditCQERScreen extends StatefulWidget {
@@ -24,6 +25,22 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
       TextEditingController();
 
   bool _carregando = true;
+
+  String _formatarData(String valor) {
+    final numeros = valor.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (numeros.length <= 2) {
+      return numeros;
+    }
+
+    if (numeros.length <= 4) {
+      return '${numeros.substring(0, 2)}/${numeros.substring(2)}';
+    }
+
+    final ano = numeros.substring(4, numeros.length > 8 ? 8 : numeros.length);
+
+    return '${numeros.substring(0, 2)}/${numeros.substring(2, 4)}/$ano';
+  }
 
   @override
   void initState() {
@@ -132,9 +149,7 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                         Icons.badge_outlined,
                         size: 64,
                       ),
-
                       const SizedBox(height: 24),
-
                       TextFormField(
                         controller: _nomeController,
                         decoration: const InputDecoration(
@@ -149,9 +164,7 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           return null;
                         },
                       ),
-
                       const SizedBox(height: 16),
-
                       TextFormField(
                         controller: _indicativoController,
                         textCapitalization: TextCapitalization.characters,
@@ -167,9 +180,7 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           return null;
                         },
                       ),
-
                       const SizedBox(height: 16),
-
                       TextFormField(
                         controller: _classeController,
                         textCapitalization: TextCapitalization.characters,
@@ -186,11 +197,31 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           return null;
                         },
                       ),
-
                       const SizedBox(height: 16),
-
                       TextFormField(
                         controller: _validadeController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          TextInputFormatter.withFunction(
+                            (oldValue, newValue) {
+                              final numeros = newValue.text;
+
+                              if (numeros.length > 8) {
+                                return oldValue;
+                              }
+
+                              final formatado = _formatarData(numeros);
+
+                              return TextEditingValue(
+                                text: formatado,
+                                selection: TextSelection.collapsed(
+                                  offset: formatado.length,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                         decoration: const InputDecoration(
                           labelText: 'Validade da licença',
                           hintText: 'Ex.: 31/12/2030',
@@ -199,9 +230,7 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-
                       const SizedBox(height: 24),
-
                       FilledButton.icon(
                         onPressed: _salvar,
                         icon: const Icon(Icons.save_outlined),
@@ -215,3 +244,4 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
     );
   }
 }
+
