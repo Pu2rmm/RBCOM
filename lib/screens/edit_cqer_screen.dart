@@ -37,9 +37,62 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
       return '${numeros.substring(0, 2)}/${numeros.substring(2)}';
     }
 
-    final ano = numeros.substring(4, numeros.length > 8 ? 8 : numeros.length);
+    final ano = numeros.substring(
+      4,
+      numeros.length > 8 ? 8 : numeros.length,
+    );
 
-    return '${numeros.substring(0, 2)}/${numeros.substring(2, 4)}/$ano';
+    return '${numeros.substring(0, 2)}/'
+        '${numeros.substring(2, 4)}/'
+        '$ano';
+  }
+
+  String? _validarData(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+
+    final partes = value.split('/');
+
+    if (partes.length != 3) {
+      return 'Informe a data no formato DD/MM/AAAA';
+    }
+
+    if (partes[0].length != 2 ||
+        partes[1].length != 2 ||
+        partes[2].length != 4) {
+      return 'Informe a data no formato DD/MM/AAAA';
+    }
+
+    final dia = int.tryParse(partes[0]);
+    final mes = int.tryParse(partes[1]);
+    final ano = int.tryParse(partes[2]);
+
+    if (dia == null || mes == null || ano == null) {
+      return 'Informe uma data válida';
+    }
+
+    if (dia < 1 || dia > 31) {
+      return 'O dia deve estar entre 01 e 31';
+    }
+
+    if (mes < 1 || mes > 12) {
+      return 'O mês deve estar entre 01 e 12';
+    }
+
+    if (ano < 1) {
+      return 'Informe um ano válido';
+    }
+
+    final data = DateTime(ano, mes, dia);
+
+    if (data.year != ano ||
+        data.month != mes ||
+        data.day != dia) {
+      return 'Essa data não existe';
+    }
+
+    return null;
   }
 
   @override
@@ -97,7 +150,10 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
 
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setString('nome', _nomeController.text.trim());
+    await prefs.setString(
+      'nome',
+      _nomeController.text.trim(),
+    );
 
     await prefs.setString(
       'indicativo',
@@ -158,32 +214,38 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
+                          if (value == null ||
+                              value.trim().isEmpty) {
                             return 'Informe seu nome';
                           }
+
                           return null;
                         },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _indicativoController,
-                        textCapitalization: TextCapitalization.characters,
+                        textCapitalization:
+                            TextCapitalization.characters,
                         decoration: const InputDecoration(
                           labelText: 'Indicativo',
                           prefixIcon: Icon(Icons.radio),
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
+                          if (value == null ||
+                              value.trim().isEmpty) {
                             return 'Informe seu indicativo';
                           }
+
                           return null;
                         },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _classeController,
-                        textCapitalization: TextCapitalization.characters,
+                        textCapitalization:
+                            TextCapitalization.characters,
                         decoration: const InputDecoration(
                           labelText: 'Classe',
                           prefixIcon:
@@ -191,9 +253,11 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
+                          if (value == null ||
+                              value.trim().isEmpty) {
                             return 'Informe sua classe';
                           }
+
                           return null;
                         },
                       ),
@@ -202,16 +266,17 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                         controller: _validadeController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
                           TextInputFormatter.withFunction(
                             (oldValue, newValue) {
-                              final numeros = newValue.text;
+                              final numeros = newValue.text
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
 
                               if (numeros.length > 8) {
                                 return oldValue;
                               }
 
-                              final formatado = _formatarData(numeros);
+                              final formatado =
+                                  _formatarData(numeros);
 
                               return TextEditingValue(
                                 text: formatado,
@@ -229,6 +294,7 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
                               Icon(Icons.calendar_today_outlined),
                           border: OutlineInputBorder(),
                         ),
+                        validator: _validarData,
                       ),
                       const SizedBox(height: 24),
                       FilledButton.icon(
@@ -244,4 +310,3 @@ class _EditCQERScreenState extends State<EditCQERScreen> {
     );
   }
 }
-
