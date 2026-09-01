@@ -34,9 +34,7 @@ class RBCOMHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'RBCOM',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -53,6 +51,12 @@ class RBCOMHomePage extends StatelessWidget {
                 icon: Icons.badge_outlined,
                 title: 'CQER Digital',
                 subtitle: 'Carteira e informações do radioamador',
+              ),
+              _buildMenuCard(
+                context,
+                icon: Icons.flash_on_outlined,
+                title: 'CW',
+                subtitle: 'Código Morse e comunicação em CW',
               ),
               _buildMenuCard(
                 context,
@@ -116,25 +120,16 @@ class RBCOMHomePage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Icon(
-              Icons.radio,
-              size: 64,
-            ),
+            const Icon(Icons.radio, size: 64),
             const SizedBox(height: 12),
             const Text(
               'RBCOM',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
             Text(
               'Radioamadorismo conectado',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade400,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade400),
             ),
           ],
         ),
@@ -151,36 +146,22 @@ class RBCOMHomePage extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 18,
-          vertical: 8,
-        ),
-        leading: CircleAvatar(
-          child: Icon(icon),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        leading: CircleAvatar(child: Icon(icon)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
-       onTap: () {
-  if (title == 'CQER Digital') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CQERScreen(),
-      ),
-    );
-    return;
-  }
+        onTap: () {
+          if (title == 'CQER Digital') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CQERScreen()),
+            );
+            return;
+          }
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('$title — em desenvolvimento'),
-            ),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$title — em desenvolvimento')),
           );
         },
       ),
