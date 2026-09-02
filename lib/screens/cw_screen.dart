@@ -12,6 +12,9 @@ class _CWScreenState extends State<CWScreen> {
 
   String _modo = 'Alfanumérico';
 
+  String? _caractereSelecionado;
+  String? _morseSelecionado;
+
   final Map<String, String> _morse = {
     'A': '.-',
     'B': '-...',
@@ -118,6 +121,62 @@ class _CWScreenState extends State<CWScreen> {
             ),
           ),
           const SizedBox(height: 12),
+
+          if (_caractereSelecionado != null && _morseSelecionado != null) ...[
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.greenAccent.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.greenAccent.withValues(alpha: 0.55),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Text(
+                    'SELECIONADO: ',
+                    style: TextStyle(
+                      color: Colors.greenAccent,
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _caractereSelecionado!,
+                    style: const TextStyle(
+                      color: Colors.greenAccent,
+                      fontSize: 22,
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    '→',
+                    style: TextStyle(
+                      color: Colors.greenAccent,
+                      fontSize: 20,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    _morseSelecionado!,
+                    style: const TextStyle(
+                      color: Colors.greenAccent,
+                      fontSize: 20,
+                      fontFamily: 'monospace',
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -131,37 +190,45 @@ class _CWScreenState extends State<CWScreen> {
             itemBuilder: (context, index) {
               final entrada = _morse.entries.elementAt(index);
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.65),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Colors.greenAccent.withValues(alpha: 0.35),
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _caractereSelecionado = entrada.key;
+                    _morseSelecionado = entrada.value;
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.65),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.greenAccent.withValues(alpha: 0.35),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      entrada.key,
-                      style: const TextStyle(
-                        color: Colors.greenAccent,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        entrada.key,
+                        style: const TextStyle(
+                          color: Colors.greenAccent,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'monospace',
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      entrada.value,
-                      style: const TextStyle(
-                        color: Colors.greenAccent,
-                        fontSize: 16,
-                        fontFamily: 'monospace',
-                        letterSpacing: 1.5,
+                      const SizedBox(width: 8),
+                      Text(
+                        entrada.value,
+                        style: const TextStyle(
+                          color: Colors.greenAccent,
+                          fontSize: 16,
+                          fontFamily: 'monospace',
+                          letterSpacing: 1.5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
