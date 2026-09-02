@@ -69,6 +69,10 @@ class _CWScreenState extends State<CWScreen> {
   };
 
   String _converterParaMorse(String texto) {
+    if (texto.trim().isEmpty) {
+      return '';
+    }
+
     final palavras = texto.toUpperCase().trim().split(RegExp(r'\s+'));
 
     return palavras
@@ -79,6 +83,92 @@ class _CWScreenState extends State<CWScreen> {
               .join(' '),
         )
         .join(' / ');
+  }
+
+  Widget _buildTabelaMorse() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.greenAccent.withValues(alpha: 0.65),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.greenAccent.withValues(alpha: 0.12),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'TABELA DE CÓDIGO MORSE',
+            style: TextStyle(
+              color: Colors.greenAccent,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+              letterSpacing: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _morse.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 2.4,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            itemBuilder: (context, index) {
+              final entrada = _morse.entries.elementAt(index);
+
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.65),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.greenAccent.withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      entrada.key,
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      entrada.value,
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 16,
+                        fontFamily: 'monospace',
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -93,7 +183,7 @@ class _CWScreenState extends State<CWScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('CW - Código Morse')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -108,6 +198,10 @@ class _CWScreenState extends State<CWScreen> {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
+
+            // =====================================================
+            // CAMPO DE MENSAGEM
+            // =====================================================
             Container(
               decoration: BoxDecoration(
                 color: Colors.black.withValues(alpha: 0.75),
@@ -153,7 +247,12 @@ class _CWScreenState extends State<CWScreen> {
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
+
+            // =====================================================
+            // SELETOR DE MODO
+            // =====================================================
             SegmentedButton<String>(
               segments: const [
                 ButtonSegment<String>(
@@ -174,39 +273,62 @@ class _CWScreenState extends State<CWScreen> {
                 });
               },
             ),
+
             const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(12),
+
+            // =====================================================
+            // ÁREA DE RESULTADO
+            // =====================================================
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.65),
+                border: Border.all(
+                  color: _modo == 'CW'
+                      ? Colors.greenAccent.withValues(alpha: 0.65)
+                      : Colors.grey,
                 ),
-                child: SingleChildScrollView(
-                  child: Text(
-                    _modo == 'Alfanumérico'
-                        ? mensagem
-                        : _converterParaMorse(mensagem),
-                    style: TextStyle(
-                      fontSize: 20,
-                      letterSpacing: 2,
-                      fontFamily: 'monospace',
-                      color: _modo == 'CW' ? Colors.greenAccent : null,
-                      shadows: _modo == 'CW'
-                          ? [
-                              Shadow(
-                                color: Colors.greenAccent.withValues(
-                                  alpha: 0.6,
-                                ),
-                                blurRadius: 8,
-                              ),
-                            ]
-                          : null,
-                    ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: _modo == 'CW'
+                    ? [
+                        BoxShadow(
+                          color: Colors.greenAccent.withValues(alpha: 0.12),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                    : null,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  _modo == 'Alfanumérico'
+                      ? mensagem
+                      : _converterParaMorse(mensagem),
+                  style: TextStyle(
+                    fontSize: 20,
+                    letterSpacing: 2,
+                    fontFamily: 'monospace',
+                    color: _modo == 'CW' ? Colors.greenAccent : null,
+                    shadows: _modo == 'CW'
+                        ? [
+                            Shadow(
+                              color: Colors.greenAccent.withValues(alpha: 0.6),
+                              blurRadius: 8,
+                            ),
+                          ]
+                        : null,
                   ),
                 ),
               ),
             ),
+
+            // =====================================================
+            // TABELA MORSE
+            // =====================================================
+            _buildTabelaMorse(),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),
