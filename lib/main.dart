@@ -1,4 +1,5 @@
 import 'screens/cqer_screen.dart';
+import 'screens/cw_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -159,7 +160,13 @@ class RBCOMHomePage extends StatelessWidget {
             );
             return;
           }
-
+          if (title == 'CW') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CWScreen()),
+            );
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('$title — em desenvolvimento')),
           );
