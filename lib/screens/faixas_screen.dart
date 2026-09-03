@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'faixa_categoria_screen.dart';
 
 class FaixasScreen extends StatelessWidget {
   const FaixasScreen({super.key});
@@ -60,7 +61,17 @@ class FaixasScreen extends StatelessWidget {
         ),
         subtitle: Text(descricao),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FaixaCategoriaScreen(
+                categoria: titulo,
+                descricao: descricao,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
