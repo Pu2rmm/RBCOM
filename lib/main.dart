@@ -1,5 +1,6 @@
 import 'screens/cqer_screen.dart';
 import 'screens/cw_screen.dart';
+import 'screens/faixas_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -164,6 +165,14 @@ class RBCOMHomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CWScreen()),
+            );
+            return;
+          }
+
+          if (title == 'Faixas de Radiofrequência') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FaixasScreen()),
             );
             return;
           }
