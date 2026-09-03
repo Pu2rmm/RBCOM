@@ -195,6 +195,8 @@ class _CWScreenState extends State<CWScreen> {
                   setState(() {
                     _caractereSelecionado = entrada.key;
                     _morseSelecionado = entrada.value;
+
+                    _mensagemController.text += entrada.key;
                   });
                 },
                 child: Container(
@@ -264,6 +266,57 @@ class _CWScreenState extends State<CWScreen> {
               'Digite uma mensagem e escolha o modo de visualização.',
               style: TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 20),
+            // =====================================================
+            // CONTROLES DA MENSAGEM
+            // =====================================================
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _mensagemController.text.isEmpty
+                        ? null
+                        : () {
+                            setState(() {
+                              final texto = _mensagemController.text;
+
+                              if (texto.isNotEmpty) {
+                                _mensagemController.text = texto.substring(
+                                  0,
+                                  texto.length - 1,
+                                );
+                                _mensagemController.selection =
+                                    TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _mensagemController.text.length,
+                                      ),
+                                    );
+                              }
+                            });
+                          },
+                    icon: const Icon(Icons.backspace_outlined),
+                    label: const Text('APAGAR'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _mensagemController.text.isEmpty
+                        ? null
+                        : () {
+                            setState(() {
+                              _mensagemController.clear();
+                              _caractereSelecionado = null;
+                              _morseSelecionado = null;
+                            });
+                          },
+                    icon: const Icon(Icons.delete_outline),
+                    label: const Text('LIMPAR'),
+                  ),
+                ),
+              ],
+            ),
+
             const SizedBox(height: 20),
 
             // =====================================================
