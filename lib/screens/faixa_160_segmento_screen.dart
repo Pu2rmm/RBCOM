@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class Faixa160SegmentoScreen extends StatelessWidget {
   final String frequencia;
   final String aplicacao;
+  final String classes;
+  final String observacao;
 
   const Faixa160SegmentoScreen({
     super.key,
     required this.frequencia,
     required this.aplicacao,
+    required this.classes,
+    required this.observacao,
   });
 
   @override
@@ -77,22 +81,22 @@ class Faixa160SegmentoScreen extends StatelessWidget {
           Card(
             child: Column(
               children: [
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.radio),
                   title: Text(
                     'Modos',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text('CW + Modos Digitais'),
+                  subtitle: Text(aplicacao),
                 ),
                 const Divider(height: 1),
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.person),
                   title: Text(
                     'Classes',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text('Todas as classes de COER'),
+                  subtitle: Text(classes),
                 ),
                 const Divider(height: 1),
                 const ListTile(
@@ -106,15 +110,13 @@ class Faixa160SegmentoScreen extends StatelessWidget {
                   ),
                 ),
                 const Divider(height: 1),
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.info_outline),
                   title: Text(
                     'Observação',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(
-                    'O segmento de 1.800 a 1.810 kHz não possui indicação específica de DX ou ACDS na Tabela IV.',
-                  ),
+                  subtitle: Text(observacao),
                 ),
               ],
             ),

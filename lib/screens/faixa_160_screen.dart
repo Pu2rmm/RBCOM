@@ -103,6 +103,9 @@ class Faixa160Screen extends StatelessWidget {
               builder: (context) => Faixa160SegmentoScreen(
                 frequencia: frequencia,
                 aplicacao: aplicacao,
+                classes: 'Todas as classes de COER',
+                observacao:
+                    'Consulte a regulamentação vigente antes da operação.',
               ),
             ),
           );
