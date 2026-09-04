@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class Faixa160SegmentoScreen extends StatelessWidget {
   final String frequencia;
-  final String aplicacao;
+  final String modos;
   final String classes;
+  final String aplicacao;
   final String observacao;
 
   const Faixa160SegmentoScreen({
     super.key,
     required this.frequencia,
-    required this.aplicacao,
+    required this.modos,
     required this.classes,
+    required this.aplicacao,
     required this.observacao,
   });
 
@@ -65,7 +67,7 @@ class Faixa160SegmentoScreen extends StatelessWidget {
                 'Modos permitidos',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(aplicacao),
+              subtitle: Text(modos),
             ),
           ),
 
@@ -87,7 +89,7 @@ class Faixa160SegmentoScreen extends StatelessWidget {
                     'Modos',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(aplicacao),
+                  subtitle: Text(modos),
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -99,15 +101,13 @@ class Faixa160SegmentoScreen extends StatelessWidget {
                   subtitle: Text(classes),
                 ),
                 const Divider(height: 1),
-                const ListTile(
-                  leading: Icon(Icons.public),
-                  title: Text(
+                ListTile(
+                  leading: const Icon(Icons.public),
+                  title: const Text(
                     'Aplicação',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(
-                    'Operação de radioamador em CW e modos digitais.',
-                  ),
+                  subtitle: Text(aplicacao),
                 ),
                 const Divider(height: 1),
                 ListTile(
