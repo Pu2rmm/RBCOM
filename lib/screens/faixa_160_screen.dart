@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../data/faixas_data.dart';
+import '../models/faixa.dart';
 import 'faixa_160_segmento_screen.dart';
 
 class Faixa160Screen extends StatelessWidget {
   const Faixa160Screen({super.key});
+  final Faixa faixa = faixa160;
 
   @override
   Widget build(BuildContext context) {
@@ -45,67 +48,15 @@ class Faixa160Screen extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          _buildSegmento(
-            context,
-            '1.800 – 1.810 kHz',
-            'CW + Digital',
-            'Todas as classes de COER',
-            'Operação em CW e modos digitais.',
-            'Sem observação específica na tabela.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.810 – 1.830 kHz',
-            'CW',
-            'Todas as classes de COER',
-            'Operação em CW.',
-            'Sem observação específica na tabela.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.830 – 1.839 kHz',
-            'CW',
-            'Todas as classes de COER',
-            'Operação em CW para comunicações DX.',
-            'Aplicação indicada como DX.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.839 – 1.840 kHz',
-            'CW + Digital',
-            'Todas as classes de COER',
-            'Operação em CW e modos digitais para DX.',
-            'DX. ACDS pode ser utilizado desde que não cause interferências em comunicações ponto a ponto e DX.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.840 – 1.843 kHz',
-            'CW + SSB + Digital',
-            'Todas as classes de COER',
-            'Operação em CW, SSB e modos digitais para DX.',
-            'Aplicação indicada como DX.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.843 – 1.850 kHz',
-            'CW + SSB',
-            'Todas as classes de COER',
-            'Operação em CW e SSB para DX.',
-            'Aplicação indicada como DX.',
-          ),
-
-          _buildSegmento(
-            context,
-            '1.850 – 2.000 kHz',
-            'CW + SSB + AM + DV + Digital + Demais modos',
-            'Classe A',
-            'Operação em CW, SSB, AM, DV, modos digitais e demais modos previstos.',
-            'Apenas Classe A.',
+          ...faixa.segmentos.map(
+            (segmento) => _buildSegmento(
+              context,
+              segmento.frequencia,
+              segmento.modos,
+              segmento.classes,
+              segmento.aplicacao,
+              segmento.observacao,
+            ),
           ),
 
           const SizedBox(height: 16),
