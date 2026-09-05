@@ -59,7 +59,6 @@ const Faixa faixa160 = Faixa(
   ],
 );
 
-const List<Faixa> faixasHF = [faixa160, faixa80];
 const Faixa faixa80 = Faixa(
   nome: '80 metros',
   frequencia: '3.500 – 4.000 kHz',
@@ -144,3 +143,66 @@ const Faixa faixa80 = Faixa(
     ),
   ],
 );
+
+const Faixa faixa40 = Faixa(
+  nome: '40 metros',
+  frequencia: '7.000 – 7.300 kHz',
+  categoria: 'HF',
+  segmentos: [
+    SegmentoFaixa(
+      frequencia: '7.000 – 7.025 kHz',
+      modos: 'CW',
+      classes: 'Todas as classes de COER',
+      aplicacao: 'Operação em CW para DX.',
+      observacao: 'Aplicação indicada como DX.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.025 – 7.040 kHz',
+      modos: 'CW',
+      classes: 'Todas as classes de COER',
+      aplicacao: 'Operação em CW.',
+      observacao: 'Sem observação específica na tabela.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.040 – 7.047 kHz',
+      modos: 'CW + Digital',
+      classes: 'Todas as classes de COER',
+      aplicacao: 'Operação em CW e modos digitais.',
+      observacao: 'Conforme Nota 3.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.047 – 7.050 kHz',
+      modos: 'CW + SSB + Digital',
+      classes: 'Classe A e Classe B',
+      aplicacao: 'Operação em CW, SSB e modos digitais.',
+      observacao: 'ACDS.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.050 – 7.053 kHz',
+      modos: 'CW + SSB + Digital + DV',
+      classes: 'Classe A e Classe B',
+      aplicacao: 'Operação em CW, SSB, modos digitais e DV.',
+      observacao: 'ACDS.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.053 – 7.100 kHz',
+      modos: 'CW + SSB + Digital + DV',
+      classes: 'Classe A e Classe B',
+      aplicacao: 'Operação em CW, SSB, modos digitais e DV.',
+      observacao: 'Sem observação específica na tabela.',
+    ),
+    SegmentoFaixa(
+      frequencia: '7.100 – 7.300 kHz',
+      modos: 'CW + SSB + Digital + DV',
+      classes: 'Classe A e Classe B',
+      aplicacao: 'Operação em CW, SSB, modos digitais e DV.',
+      observacao: 'Sem observação específica na tabela.',
+    ),
+  ],
+);
+
+const List<Faixa> faixasHF = [
+  faixa160,
+  faixa80,
+  faixa40,
+];
