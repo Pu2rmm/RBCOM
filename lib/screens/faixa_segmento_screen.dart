@@ -54,26 +54,6 @@ class FaixaSegmentoScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           const Text(
-            'Aplicação',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 12),
-
-          Card(
-            child: ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.radio)),
-              title: const Text(
-                'Modos permitidos',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(modos),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          const Text(
             'Informações',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
