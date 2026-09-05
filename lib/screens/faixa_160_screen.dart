@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../data/faixas_data.dart';
 import '../models/faixa.dart';
-import 'faixa_160_segmento_screen.dart';
+import 'faixa_segmento_screen.dart';
 
 class Faixa160Screen extends StatelessWidget {
   const Faixa160Screen({super.key});
+
   final Faixa faixa = faixa160;
 
   @override
@@ -97,7 +98,7 @@ class Faixa160Screen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Faixa160SegmentoScreen(
+              builder: (context) => FaixaSegmentoScreen(
                 frequencia: frequencia,
                 modos: modos,
                 classes: classes,

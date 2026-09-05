@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Faixa160SegmentoScreen extends StatelessWidget {
+class FaixaSegmentoScreen extends StatelessWidget {
   final String frequencia;
   final String modos;
   final String classes;
   final String aplicacao;
   final String observacao;
 
-  const Faixa160SegmentoScreen({
+  const FaixaSegmentoScreen({
     super.key,
     required this.frequencia,
     required this.modos,
